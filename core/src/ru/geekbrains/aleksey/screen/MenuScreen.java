@@ -8,15 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.aleksey.base.BaseScreen;
 
 public class MenuScreen extends BaseScreen {
-    private static final float V_LEN = 1.0f;
-
     private Texture background;
     private Texture spaceShip;
     private Vector2 pos;
-    private Vector2 touch;
-//    private Vector2 v;
-//    private Vector2 tmp;
-
+    private Vector2 v;
+    private Vector2 pos2;
 
     @Override
     public void show() {
@@ -24,9 +20,8 @@ public class MenuScreen extends BaseScreen {
         background = new Texture("space.jpg");
         spaceShip = new Texture("spaceShip.png");
         pos = new Vector2(0,0);
-        touch = new Vector2();
-//        v = new Vector2();
-//        tmp = new Vector2();
+        pos2 = new Vector2();
+        v = new Vector2();
     }
 
     @Override
@@ -45,28 +40,27 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        touch.set(screenX, Gdx.graphics.getHeight()-screenY);
-//        v.set(touch.cpy().sub(pos)).setLength(V_LEN);
+        pos2.set(screenX - spaceShip.getWidth()/2, (Gdx.graphics.getHeight()-screenY) - spaceShip.getHeight()/2);
+        System.out.println(pos2);
+        v.set(pos2.cpy().sub(pos));
+        v.nor().scl(2.0f);
         return false;
     }
 
     private void update(float delta) {
-//        tmp.set(touch);
-//        float remainDistance = (tmp.sub(pos).len());
-//        if(remainDistance > V_LEN) {
-//            pos.add(v);
-//        } else {
-//            v.setZero();
-//            pos.set(touch);
-//        }
+        if(pos2.len() - pos.len() > -1.0f && pos2.len() - pos.len() < 1.0f) {
+            v.set(0.0f,0.0f);
+        } else {
+            pos.add(v);
+        }
     }
 
     private void draw () {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(background, -1f, -1f,2f,2f);
-        batch.draw(spaceShip,pos.x,pos.y,0.3f,0.3f);
+        batch.draw(background, 0, 0);
+        batch.draw(spaceShip,pos.x,pos.y);
         batch.end();
     }
 }
