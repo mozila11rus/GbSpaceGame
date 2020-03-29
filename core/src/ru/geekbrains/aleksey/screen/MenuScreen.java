@@ -6,22 +6,36 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.base.BaseScreen;
+import ru.geekbrains.aleksey.exception.GameException;
+import ru.geekbrains.aleksey.math.Rect;
+import ru.geekbrains.aleksey.sprites.Background;
 
 public class MenuScreen extends BaseScreen {
-    private Texture background;
+    private static final float V_LEN = 1.0f;
+
+    private Texture bg;
+    private Background background;
     private Texture spaceShip;
     private Vector2 pos;
-    private Vector2 v;
-    private Vector2 pos2;
+
+//    private Vector2 v;
+//    private Vector2 tmp;
+
 
     @Override
     public void show() {
         super.show();
-        background = new Texture("space.jpg");
+        bg = new Texture("spaceBG.jpg");
         spaceShip = new Texture("spaceShip.png");
+        try {
+            background = new Background(bg);
+        } catch (GameException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
         pos = new Vector2(0,0);
-        pos2 = new Vector2();
-        v = new Vector2();
+//        v = new Vector2();
+//        tmp = new Vector2();
     }
 
     @Override
@@ -33,34 +47,39 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         batch.dispose();
-        background.dispose();
+        bg.dispose();
         spaceShip.dispose();
         super.dispose();
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        pos2.set(screenX - spaceShip.getWidth()/2, (Gdx.graphics.getHeight()-screenY) - spaceShip.getHeight()/2);
-        System.out.println(pos2);
-        v.set(pos2.cpy().sub(pos));
-        v.nor().scl(2.0f);
+    public void resize(Rect worldBounds) {
+        background.resize(worldBounds);
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        pos.set(touch);
         return false;
     }
 
     private void update(float delta) {
-        if(pos2.len() - pos.len() > -1.0f && pos2.len() - pos.len() < 1.0f) {
-            v.set(0.0f,0.0f);
-        } else {
-            pos.add(v);
-        }
+//        tmp.set(touch);
+//        float remainDistance = (tmp.sub(pos).len());
+//        if(remainDistance > V_LEN) {
+//            pos.add(v);
+//        } else {
+//            v.setZero();
+//            pos.set(touch);
+//        }
     }
 
     private void draw () {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(background, 0, 0);
-        batch.draw(spaceShip,pos.x,pos.y);
+        background.draw(batch);
+        batch.draw(spaceShip,pos.x,pos.y,0.3f,0.3f);
         batch.end();
     }
 }
