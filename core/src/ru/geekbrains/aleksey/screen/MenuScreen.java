@@ -9,17 +9,15 @@ import ru.geekbrains.aleksey.base.BaseScreen;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.sprites.Background;
+import ru.geekbrains.aleksey.sprites.Spaceship;
 
 public class MenuScreen extends BaseScreen {
-    private static final float V_LEN = 1.0f;
+
 
     private Texture bg;
     private Background background;
     private Texture spaceShip;
-    private Vector2 pos;
-
-//    private Vector2 v;
-//    private Vector2 tmp;
+    private Spaceship ship;
 
 
     @Override
@@ -29,13 +27,11 @@ public class MenuScreen extends BaseScreen {
         spaceShip = new Texture("spaceShip.png");
         try {
             background = new Background(bg);
+            ship = new Spaceship(spaceShip);
         } catch (GameException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        pos = new Vector2(0,0);
-//        v = new Vector2();
-//        tmp = new Vector2();
     }
 
     @Override
@@ -55,31 +51,27 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        ship.resize(worldBounds);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        pos.set(touch);
+        ship.touchDown(touch,pointer,button);
         return false;
     }
 
     private void update(float delta) {
-//        tmp.set(touch);
-//        float remainDistance = (tmp.sub(pos).len());
-//        if(remainDistance > V_LEN) {
-//            pos.add(v);
-//        } else {
-//            v.setZero();
-//            pos.set(touch);
-//        }
+        ship.update(delta);
     }
+
+
 
     private void draw () {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
-        batch.draw(spaceShip,pos.x,pos.y,0.3f,0.3f);
+        ship.draw(batch);
         batch.end();
     }
 }

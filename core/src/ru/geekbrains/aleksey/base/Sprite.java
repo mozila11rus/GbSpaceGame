@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
+import ru.geekbrains.aleksey.sprites.Spaceship;
 
 public class Sprite extends Rect {
 
@@ -27,6 +28,8 @@ public class Sprite extends Rect {
        batch.draw(regions[frame], getLeft(),getBottom(),halfWidth,halfHeight,
                getWidth(),getHeight(),scale,scale,angle);
    }
+    public void update(float delta) {
+    }
 
    public void setHeightProportion (float height) {
        setHeight(height);

@@ -1,6 +1,5 @@
 package ru.geekbrains.aleksey.math;
 
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -9,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Rect {
 
-    public final Vector2 POS = new Vector2();
+    public final Vector2 pos = new Vector2();
     protected float halfWidth;
     protected float halfHeight;
 
@@ -18,29 +17,29 @@ public class Rect {
     }
 
     public Rect(float x, float y, float halfWidth, float halfHeight) {
-        POS.set(x, y);
+        pos.set(x, y);
         this.halfWidth = halfWidth;
         this.halfHeight= halfHeight;
     }
 
     public Rect (Rect from) {
-        this(from.POS.x, from.POS.y, from.getHalfWidth(), from.getHalfHeight());
+        this(from.pos.x, from.pos.y, from.getHalfWidth(), from.getHalfHeight());
     }
 
     public float getLeft() {
-        return POS.x - halfWidth;
+        return pos.x - halfWidth;
     }
 
     public float getRight() {
-        return POS.x + halfWidth;
+        return pos.x + halfWidth;
     }
 
     public float getTop() {
-        return POS.y + halfHeight;
+        return pos.y + halfHeight;
     }
 
     public float getBottom() {
-        return POS.y - halfHeight;
+        return pos.y - halfHeight;
     }
 
 
@@ -61,22 +60,22 @@ public class Rect {
     }
 
     public void set (Rect from) {
-        POS.set(from.POS);
+        pos.set(from.pos);
         halfWidth = from.halfWidth;
         halfHeight = from.halfHeight;
     }
 
     public void setLeft (float left) {
-        POS.x = left + halfWidth;
+        pos.x = left + halfWidth;
     }
     public void setRight (float right) {
-        POS.x = right - halfWidth;
+        pos.x = right - halfWidth;
     }
     public void setTop (float top) {
-        POS.y = top - halfHeight;
+        pos.y = top - halfHeight;
     }
     public void setBottom (float bottom) {
-        POS.y = bottom + halfHeight;
+        pos.y = bottom + halfHeight;
     }
     public void setWidth (float width) {
         this.halfWidth = width / 2f;
@@ -102,7 +101,7 @@ public class Rect {
 
     @Override
     public String toString() {
-        return "Rectangle: pos" + POS + " size(" + getWidth() + ", " + getHeight() + ")";
+        return "Rectangle: pos" + pos + " size(" + getWidth() + ", " + getHeight() + ")";
     }
 
 }
