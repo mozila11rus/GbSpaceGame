@@ -1,5 +1,6 @@
 package ru.geekbrains.aleksey.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,8 @@ import ru.geekbrains.aleksey.base.BaseScreen;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.sprites.Background;
+import ru.geekbrains.aleksey.sprites.ButtonExit;
+import ru.geekbrains.aleksey.sprites.ButtonPlay;
 import ru.geekbrains.aleksey.sprites.Star;
 
 public class MenuScreen extends BaseScreen {
@@ -19,6 +22,13 @@ public class MenuScreen extends BaseScreen {
     private TextureAtlas atlas;
     private static final int STAR_COUNT = 128;
     private Star [] stars;
+    private ButtonExit buttonExit;
+    private ButtonPlay buttonPlay;
+    private final Game game;
+
+    public MenuScreen(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -31,6 +41,8 @@ public class MenuScreen extends BaseScreen {
             for(int i = 0; i < STAR_COUNT; i++) {
                 stars[i] = new Star(atlas);
             }
+            buttonExit = new ButtonExit(atlas);
+            buttonPlay = new ButtonPlay(atlas, game);
         } catch (GameException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -57,10 +69,21 @@ public class MenuScreen extends BaseScreen {
         for (Star star : stars) {
             star.resize(worldBounds);
         }
+        buttonExit.resize(worldBounds);
+        buttonPlay.resize(worldBounds);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
+        buttonExit.touchDown(touch, pointer, button);
+        buttonPlay.touchDown(touch, pointer, button);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        buttonExit.touchUp(touch, pointer, button);
+        buttonPlay.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -80,6 +103,8 @@ public class MenuScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        buttonExit.draw(batch);
+        buttonPlay.draw(batch);
         batch.end();
     }
 }

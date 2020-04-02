@@ -19,8 +19,8 @@ btnExit
   index: -1
 btnPlay
   rotate: false
-  xy: 653, 649
-  size: 250, 252
-  orig: 250, 252
+  xy: 653, 645
+  size: 256, 256
+  orig: 256, 256
   offset: 0, 0
   index: -1
