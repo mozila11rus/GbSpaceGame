@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
-import ru.geekbrains.aleksey.sprites.Spaceship;
 
 public class Sprite extends Rect {
 
@@ -36,6 +35,7 @@ public class Sprite extends Rect {
        float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
        setWidth(height * aspect);
    }
+
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;
     }
