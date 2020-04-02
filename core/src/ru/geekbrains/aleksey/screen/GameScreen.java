@@ -10,6 +10,7 @@ import ru.geekbrains.aleksey.base.BaseScreen;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.sprites.Background;
+import ru.geekbrains.aleksey.sprites.SpaceShip;
 import ru.geekbrains.aleksey.sprites.Star;
 
 public class GameScreen extends BaseScreen {
@@ -19,6 +20,7 @@ public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
     private Star[] stars;
     private TextureAtlas atlas;
+    private SpaceShip ship;
 
 
     @Override
@@ -31,6 +33,7 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
+        ship.resize(worldBounds);
         for (Star star : stars) {
             star.resize(worldBounds);
         }
@@ -46,17 +49,23 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+        ship.keyDown(keycode);
+        System.out.println("down " + keycode);
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return super.keyUp(keycode);
+       ship.keyUp(keycode);
+        System.out.println("up " + keycode);
+       return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return super.touchDown(touch, pointer, button);
+        ship.touchDown(touch, pointer, button);
+        return false;
+
     }
 
     @Override
@@ -68,13 +77,14 @@ public class GameScreen extends BaseScreen {
     public void show() {
         super.show();
         bg = new Texture("spaceBG.jpg");
-        atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.pack"));
+        atlas = new TextureAtlas(Gdx.files.internal("textures/game.pack"));
         try {
             background = new Background(bg);
             stars = new Star[STAR_COUNT];
             for(int i = 0; i < STAR_COUNT; i++) {
                 stars[i] = new Star(atlas);
             }
+            ship = new SpaceShip(atlas);
         } catch (GameException e) {
             e.printStackTrace();
         }
@@ -84,6 +94,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.update(delta);
         }
+        ship.update(delta);
     }
 
     private void draw () {
@@ -94,6 +105,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
+        ship.draw(batch);
         batch.end();
     }
 }
