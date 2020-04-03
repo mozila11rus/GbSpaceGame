@@ -1,0 +1,19 @@
+
+game.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+star
+  rotate: false
+  xy: 1, 375
+  size: 650, 642
+  orig: 650, 642
+  offset: 0, 0
+  index: -1
+ship
+  rotate: false
+  xy: 1, 1
+  size: 422, 372
+  orig: 422, 372
+  offset: 0, 0
+  index: -1
