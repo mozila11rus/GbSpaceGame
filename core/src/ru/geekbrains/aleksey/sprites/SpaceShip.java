@@ -16,6 +16,8 @@ public class SpaceShip extends Sprite {
     private int keycode;
     private final Vector2 vHorizon = new Vector2(0.01f,0f);
     private final Vector2 vVertical = new Vector2(0f,0.01f);
+    private boolean isKeyPressed;
+    private Rect worldBounds;
 
 
     public SpaceShip (TextureAtlas atlas) throws GameException {
@@ -26,10 +28,13 @@ public class SpaceShip extends Sprite {
     }
     public boolean keyDown(int keycode) {
         this.keycode = keycode;
+        isKeyPressed = true;
         return false;
     }
 
     public boolean keyUp(int keycode) {
+        this.keycode = keycode;
+        isKeyPressed = false;
         return false;
     }
 
@@ -42,6 +47,7 @@ public class SpaceShip extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         setHeightProportion(0.15f);
         setBottom(worldBounds.getBottom() + 0.02f);
     }
@@ -58,8 +64,17 @@ public class SpaceShip extends Sprite {
             pos.set(touch);
         }
 
-        if (keycode == 21) {
+        if (keycode == 21 && isKeyPressed && (getLeft() + getHalfWidth()) > worldBounds.getLeft()) {
             pos.sub(vHorizon);
+        }
+        if (keycode == 22 && isKeyPressed && (getRight() - getHalfWidth()) < worldBounds.getRight()) {
+            pos.add(vHorizon);
+        }
+        if (keycode == 19 && isKeyPressed && getTop() < (worldBounds.getTop() - worldBounds.getHalfHeight())) {
+            pos.add(vVertical);
+        }
+        if (keycode == 20 && isKeyPressed && getBottom() > worldBounds.getBottom()) {
+            pos.sub(vVertical);
         }
 
     }
