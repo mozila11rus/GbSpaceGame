@@ -1,6 +1,8 @@
 package ru.geekbrains.aleksey.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -24,6 +26,7 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas2;
     private MainShip mainShip;
     private BulletPool bulletPool;
+    private Music music;
 
     @Override
     public void show() {
@@ -31,6 +34,8 @@ public class GameScreen extends BaseScreen {
         bg = new Texture("spaceBG.jpg");
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
         atlas2 = new TextureAtlas(Gdx.files.internal("textures/gameAtlas.pack"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainScreenMusic.mp3"));
+        music.play();
         bulletPool = new BulletPool();
         try {
             background = new Background(bg);
@@ -67,6 +72,8 @@ public class GameScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        music.dispose();
+        mainShip.dispose();
         super.dispose();
 
     }
