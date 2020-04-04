@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.aleksey.base.BaseScreen;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
+import ru.geekbrains.aleksey.pool.BulletPool;
 import ru.geekbrains.aleksey.sprites.Background;
-import ru.geekbrains.aleksey.sprites.SpaceShip;
+import ru.geekbrains.aleksey.sprites.MainShip;
 import ru.geekbrains.aleksey.sprites.Star;
 
 public class GameScreen extends BaseScreen {
@@ -20,12 +21,34 @@ public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 64;
     private Star[] stars;
     private TextureAtlas atlas;
-    private SpaceShip ship;
+    private TextureAtlas atlas2;
+    private MainShip mainShip;
+    private BulletPool bulletPool;
+
+    @Override
+    public void show() {
+        super.show();
+        bg = new Texture("spaceBG.jpg");
+        atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
+        atlas2 = new TextureAtlas(Gdx.files.internal("textures/gameAtlas.pack"));
+        bulletPool = new BulletPool();
+        try {
+            background = new Background(bg);
+            stars = new Star[STAR_COUNT];
+            for(int i = 0; i < STAR_COUNT; i++) {
+                stars[i] = new Star(atlas2);
+            }
+            mainShip = new MainShip(atlas, bulletPool);
+        } catch (GameException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
     public void render(float delta) {
       update(delta);
+      freeAllDestroyed();
       draw();
     }
 
@@ -33,7 +56,7 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        ship.resize(worldBounds);
+        mainShip.resize(worldBounds);
         for (Star star : stars) {
             star.resize(worldBounds);
         }
@@ -43,58 +66,48 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
         super.dispose();
 
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        ship.keyDown(keycode);
-        System.out.println("down " + keycode);
+        mainShip.keyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-       ship.keyUp(keycode);
-        System.out.println("up " + keycode);
+       mainShip.keyUp(keycode);
        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        ship.touchDown(touch, pointer, button);
+        mainShip.touchDown(touch, pointer, button);
         return false;
 
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return super.touchUp(touch, pointer, button);
+        mainShip.touchUp(touch, pointer, button);
+        return false;
     }
 
-    @Override
-    public void show() {
-        super.show();
-        bg = new Texture("spaceBG.jpg");
-        atlas = new TextureAtlas(Gdx.files.internal("textures/game.pack"));
-        try {
-            background = new Background(bg);
-            stars = new Star[STAR_COUNT];
-            for(int i = 0; i < STAR_COUNT; i++) {
-                stars[i] = new Star(atlas);
-            }
-            ship = new SpaceShip(atlas);
-        } catch (GameException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private void update (float delta) {
         for (Star star : stars) {
             star.update(delta);
         }
-        ship.update(delta);
+        mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    public void freeAllDestroyed() {
+        bulletPool.freeAllDestroyedActiveObjects();
     }
 
     private void draw () {
@@ -105,7 +118,8 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars) {
             star.draw(batch);
         }
-        ship.draw(batch);
+        mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 }

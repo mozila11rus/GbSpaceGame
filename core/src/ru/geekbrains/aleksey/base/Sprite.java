@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
+import ru.geekbrains.aleksey.utils.Regions;
 
 public class Sprite extends Rect {
 
@@ -13,6 +14,12 @@ public class Sprite extends Rect {
    protected float scale = 1f;
    protected TextureRegion [] regions;
    protected int frame;
+   private boolean destroyed = false;
+
+
+   public Sprite () {
+
+   }
 
    public Sprite (TextureRegion region) throws GameException {
 
@@ -21,6 +28,13 @@ public class Sprite extends Rect {
        }
        regions = new TextureRegion[1];
        regions[0] = region;
+   }
+
+   public Sprite (TextureRegion region, int rows, int cols, int frames) throws GameException {
+       if (region == null) {
+           throw new GameException("Region is null");
+       }
+       this.regions = Regions.split(region, rows, cols, frames);
    }
 
    public void draw (SpriteBatch batch) {
@@ -42,7 +56,7 @@ public class Sprite extends Rect {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         return false;
     }
-    public boolean touchDragged(Vector2 touch, int pointer, int button) {
+    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 
@@ -63,5 +77,17 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public void destroy() {
+       destroyed = true;
+    }
+
+    public void flushDestroy() {
+       destroyed = false;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
     }
 }
