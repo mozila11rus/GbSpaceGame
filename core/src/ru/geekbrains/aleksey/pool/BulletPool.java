@@ -1,6 +1,6 @@
 package ru.geekbrains.aleksey.pool;
 
-import ru.geekbrains.aleksey.base.Sprite;
+
 import ru.geekbrains.aleksey.base.SpritesPool;
 import ru.geekbrains.aleksey.sprites.Bullet;
 
