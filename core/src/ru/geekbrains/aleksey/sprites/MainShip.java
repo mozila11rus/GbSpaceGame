@@ -1,6 +1,8 @@
 package ru.geekbrains.aleksey.sprites;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +11,7 @@ import ru.geekbrains.aleksey.base.Sprite;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
+
 
 public class MainShip extends Sprite {
     private static final float SHIP_HEIGHT = 0.15f;
@@ -19,6 +22,7 @@ public class MainShip extends Sprite {
     private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private Vector2 bulletV;
+    private Sound sound;
 
     private final Vector2 v;
     private final Vector2 vHorizon;
@@ -26,12 +30,15 @@ public class MainShip extends Sprite {
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+    private float animateInterval = 0.25f;
+    private float animateTimer;
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) throws GameException {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
+        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         bulletV = new Vector2(0, 0.5f);
         vHorizon = new Vector2(0.3f,0f);
         v = new Vector2();
@@ -127,6 +134,7 @@ public class MainShip extends Sprite {
     @Override
     public void update(float delta) {
        pos.mulAdd(v,delta);
+       animateTimer += delta;
        if (getLeft() < worldBounds.getLeft()) {
            setLeft(worldBounds.getLeft());
            stop();
@@ -135,6 +143,11 @@ public class MainShip extends Sprite {
            setRight(worldBounds.getRight());
            stop();
        }
+        if (animateTimer >= animateInterval) {
+            animateTimer = 0;
+            shoot();
+            sound.play(0.5f);
+        }
     }
 
     public void shoot() {
@@ -153,4 +166,10 @@ public class MainShip extends Sprite {
     private void stop() {
         v.setZero();
     }
+
+    public void dispose () {
+        sound.dispose();
+    }
+
+
 }
