@@ -38,6 +38,7 @@ public class MenuScreen extends BaseScreen {
         bg = new Texture("spaceBG.jpg");
         atlas = new TextureAtlas(Gdx.files.internal("textures/menuAtlas.pack"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.setLooping(true);
         music.play();
         try {
             background = new Background(bg);

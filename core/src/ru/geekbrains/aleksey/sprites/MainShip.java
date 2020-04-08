@@ -4,34 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.aleksey.base.Sprite;
+import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
 
 
-public class MainShip extends Sprite {
+public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.02f;
     private static final int INVALID_POINTER = -1;
 
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Vector2 bulletV;
     private Sound sound;
 
-    private final Vector2 v;
-    private final Vector2 vHorizon;
     private boolean pressedLeft;
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
-    private float animateInterval = 0.25f;
-    private float animateTimer;
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) throws GameException {
@@ -134,7 +125,7 @@ public class MainShip extends Sprite {
     @Override
     public void update(float delta) {
        pos.mulAdd(v,delta);
-       animateTimer += delta;
+       reloadTimer += delta;
        if (getLeft() < worldBounds.getLeft()) {
            setLeft(worldBounds.getLeft());
            stop();
@@ -143,16 +134,11 @@ public class MainShip extends Sprite {
            setRight(worldBounds.getRight());
            stop();
        }
-        if (animateTimer >= animateInterval) {
-            animateTimer = 0;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0;
             shoot();
             sound.play(0.5f);
         }
-    }
-
-    public void shoot() {
-    Bullet bullet = bulletPool.obtain();
-    bullet.set(this, bulletRegion, pos, bulletV, 0.01f, worldBounds, 1);
     }
 
     private void moveRight() {

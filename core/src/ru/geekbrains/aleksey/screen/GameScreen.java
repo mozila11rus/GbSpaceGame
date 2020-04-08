@@ -46,6 +46,7 @@ public class GameScreen extends BaseScreen {
         atlas2 = new TextureAtlas(Gdx.files.internal("textures/gameAtlas.pack"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainScreenMusic.mp3"));
         enemyShipRegion = atlas.findRegion("enemy0");
+        music.setLooping(true);
         music.play();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
