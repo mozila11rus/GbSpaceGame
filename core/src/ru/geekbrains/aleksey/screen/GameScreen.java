@@ -17,6 +17,7 @@ import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
 import ru.geekbrains.aleksey.pool.EnemyPool;
 import ru.geekbrains.aleksey.sprites.Background;
+import ru.geekbrains.aleksey.sprites.Bullet;
 import ru.geekbrains.aleksey.sprites.EnemyShip;
 import ru.geekbrains.aleksey.sprites.MainShip;
 import ru.geekbrains.aleksey.sprites.Star;
@@ -128,8 +129,6 @@ public class GameScreen extends BaseScreen {
         return false;
     }
 
-
-
     private void update (float delta) {
         for (Star star : stars) {
             star.update(delta);
@@ -140,8 +139,10 @@ public class GameScreen extends BaseScreen {
         enemyEmitter.generate(delta);
         }
 
+
         private void checkCollisions () {
             List <EnemyShip> enemyList = enemyPool.getActiveObjects();
+            List <Bullet> bulletList = bulletPool.getActiveObjects();
             for (EnemyShip enemyShip : enemyList) {
                 if (enemyShip.isDestroyed()) {
                     continue;
@@ -150,8 +151,16 @@ public class GameScreen extends BaseScreen {
                 if (mainShip.pos.dst(enemyShip.pos) < minDist) {
                     enemyShip.destroy();
                 }
+
+                for (Bullet bullet : bulletList) {
+                    if (!bullet.isOutside(enemyShip) && bullet.getOwner() == mainShip) {
+                        enemyShip.destroy();
+                        bullet.destroy();
+                    }
+                }
             }
         }
+
 
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
