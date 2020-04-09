@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.math.Rnd;
 import ru.geekbrains.aleksey.pool.EnemyPool;
@@ -15,7 +17,7 @@ public class EnemyEmitter {
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
     private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.015f;
     private static final float ENEMY_SMALL_BULLET_VY = -0.3f;
-    private static final int ENEMY_SMALL_DAMAGE =1;
+    private static final int ENEMY_SMALL_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 2f;
     private static final int ENEMY_SMALL_HP = 1;
 
@@ -54,17 +56,17 @@ public class EnemyEmitter {
         this.enemyPool = enemyPool;
         this.bulletRegion = atlas.findRegion("bulletEnemy");
         TextureRegion enemy0 = atlas.findRegion("enemy0");
-        this.enemySmallRegion = Regions.split(enemy0,1,2,2);
+        this.enemySmallRegion = Regions.split(enemy0, 1, 2, 2);
         TextureRegion enemy1 = atlas.findRegion("enemy1");
-        this.enemyMediumRegion = Regions.split(enemy1,1,2,2);
+        this.enemyMediumRegion = Regions.split(enemy1, 1, 2, 2);
         TextureRegion enemy2 = atlas.findRegion("enemy2");
-        this.enemyBigRegion = Regions.split(enemy2,1,2,2);
-        this.enemySmallV = new Vector2(0,-0.15f);
-        this.enemyMediumV = new Vector2(0,-0.01f);
-        this.enemyBigV = new Vector2(0,-0.005f);
+        this.enemyBigRegion = Regions.split(enemy2, 1, 2, 2);
+        this.enemySmallV = new Vector2(0, -0.15f);
+        this.enemyMediumV = new Vector2(0, -0.01f);
+        this.enemyBigV = new Vector2(0, -0.005f);
     }
 
-    public void generate (float delta) {
+    public void generate(float delta) {
         generateTimer += delta;
         if (generateTimer >= generateInterval) {
             generateTimer = 0f;
@@ -78,7 +80,7 @@ public class EnemyEmitter {
                 enemyShip.setEnemyShipParameters(enemyMediumRegion, enemyMediumV, bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT, ENEMY_MEDIUM_BULLET_VY, ENEMY_MEDIUM_DAMAGE,
                         ENEMY_MEDIUM_RELOAD_INTERVAL, shootSound, ENEMY_MEDIUM_HEIGHT, ENEMY_MEDIUM_HP);
-            }  else {
+            } else {
                 enemyShip.setEnemyShipParameters(enemyBigRegion, enemyBigV, bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT, ENEMY_BIG_BULLET_VY, ENEMY_BIG_DAMAGE,
                         ENEMY_BIG_RELOAD_INTERVAL, shootSound, ENEMY_BIG_HEIGHT, ENEMY_BIG_HP);
@@ -87,4 +89,5 @@ public class EnemyEmitter {
             enemyShip.setBottom(worldBounds.getTop());
         }
     }
+
 }
