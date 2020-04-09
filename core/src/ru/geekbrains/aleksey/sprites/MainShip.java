@@ -1,6 +1,5 @@
 package ru.geekbrains.aleksey.sprites;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,22 +16,25 @@ public class MainShip extends Ship {
     private static final float BOTTOM_MARGIN = 0.02f;
     private static final int INVALID_POINTER = -1;
 
-    private Sound sound;
-
     private boolean pressedLeft;
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool) throws GameException {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) throws GameException {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
+        this.shootSound = shootSound;
         bulletRegion = atlas.findRegion("bulletMainShip");
-        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         bulletV = new Vector2(0, 0.5f);
-        vHorizon = new Vector2(0.3f,0f);
+        v0 = new Vector2(0.3f,0f);
+        reloadInterval = 0.25f;
+        reloadTimer = reloadInterval;
         v = new Vector2();
+        bulletHeight = 0.01f;
+        damage = 1;
+        hp = 100;
     }
 
     @Override
@@ -54,8 +56,6 @@ public class MainShip extends Ship {
                 pressedRight = true;
                 moveRight();
                 break;
-            case Input.Keys.UP:
-                shoot();
         }
         return false;
     }
@@ -124,8 +124,7 @@ public class MainShip extends Ship {
 
     @Override
     public void update(float delta) {
-       pos.mulAdd(v,delta);
-       reloadTimer += delta;
+        super.update(delta);
        if (getLeft() < worldBounds.getLeft()) {
            setLeft(worldBounds.getLeft());
            stop();
@@ -134,28 +133,18 @@ public class MainShip extends Ship {
            setRight(worldBounds.getRight());
            stop();
        }
-        if (reloadTimer >= reloadInterval) {
-            reloadTimer = 0;
-            shoot();
-            sound.play(0.5f);
-        }
     }
 
     private void moveRight() {
-        v.set(vHorizon);
+        v.set(v0);
     }
 
     private void moveLeft() {
-        v.set(vHorizon).rotate(180);
+        v.set(v0).rotate(180);
     }
 
     private void stop() {
         v.setZero();
     }
-
-    public void dispose () {
-        sound.dispose();
-    }
-
 
 }

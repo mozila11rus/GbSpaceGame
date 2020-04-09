@@ -1,44 +1,51 @@
 package ru.geekbrains.aleksey.sprites;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.aleksey.base.Sprite;
+import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.math.Rect;
-import ru.geekbrains.aleksey.math.Rnd;
-import ru.geekbrains.aleksey.utils.Regions;
-
-
-public class EnemyShip extends Sprite {
-    private Rect worldBounds;
-
-    private static final float SHIP_HEIGHT = 0.2f;
-    private Vector2 v;
+import ru.geekbrains.aleksey.pool.BulletPool;
 
 
 
-    public EnemyShip () {
-       regions = new TextureRegion[1];
+public class EnemyShip extends Ship {
+
+
+    public EnemyShip (BulletPool bulletPool, Rect worldBounds) {
+        this.bulletPool = bulletPool;
+        this.worldBounds = worldBounds;
+        v = new Vector2();
+        v0 = new Vector2();
+        bulletV = new Vector2();
     }
 
-    public void setEnemyShipParameters (TextureRegion region, Rect worldBounds) {
-        this.worldBounds = worldBounds;
-        regions = Regions.split(region,1,2,2);
-        float vx = 0;
-        float vy = Rnd.nextFloat(-0.05f, -0.1f);
-        v = new Vector2(vx, vy);
-        float posX = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
-        float posY = worldBounds.getTop() + getHalfHeight();
-        this.pos.set(posX, posY);
-        setHeightProportion(SHIP_HEIGHT);
+    public void setEnemyShipParameters (TextureRegion[] regions, Vector2 v0,
+                                       TextureRegion bulletRegion, float bulletHeight,
+                                       float bulletVY, int damage, float reloadInterval,
+                                       Sound shootSound, float height, int hp) {
+        this.regions = regions;
+        this.v0.set(v0);
+        this.bulletRegion = bulletRegion;
+        this.bulletHeight = bulletHeight;
+        this.bulletV.set(0,bulletVY);
+        this.damage = damage;
+        this.reloadInterval = reloadInterval;
+        this.reloadTimer = reloadInterval;
+        this.shootSound = shootSound;
+        this.hp = hp;
+        this.v.set(v0);
+        setHeightProportion(height);
+
     }
 
 
     @Override
     public void update(float delta) {
-        pos.mulAdd(v, delta);
-        if (isOutside(worldBounds)) {
-            destroy();
+        super.update(delta);
+    if (getBottom() <= worldBounds.getBottom()){
+        destroy();
         }
     }
 }

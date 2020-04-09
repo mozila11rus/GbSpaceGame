@@ -2,11 +2,14 @@ package ru.geekbrains.aleksey.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.List;
 
 import ru.geekbrains.aleksey.base.BaseScreen;
 import ru.geekbrains.aleksey.exception.GameException;
@@ -17,6 +20,7 @@ import ru.geekbrains.aleksey.sprites.Background;
 import ru.geekbrains.aleksey.sprites.EnemyShip;
 import ru.geekbrains.aleksey.sprites.MainShip;
 import ru.geekbrains.aleksey.sprites.Star;
+import ru.geekbrains.aleksey.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
 
@@ -30,10 +34,10 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private Music music;
     private EnemyPool enemyPool;
-    private float animateInterval = 5f;
-    private float animateTimer;
     private TextureRegion enemyShipRegion;
-    private Rect worldBounds;
+    private Sound laserSound;
+    private Sound bulletSound;
+    private EnemyEmitter enemyEmitter;
 
 
 
@@ -45,18 +49,21 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
         atlas2 = new TextureAtlas(Gdx.files.internal("textures/gameAtlas.pack"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainScreenMusic.mp3"));
+        laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         enemyShipRegion = atlas.findRegion("enemy0");
         music.setLooping(true);
         music.play();
         bulletPool = new BulletPool();
-        enemyPool = new EnemyPool();
+        enemyPool = new EnemyPool(bulletPool, worldBounds);
+        enemyEmitter = new EnemyEmitter(atlas, enemyPool, worldBounds, bulletSound);
         try {
             background = new Background(bg);
             stars = new Star[STAR_COUNT];
             for(int i = 0; i < STAR_COUNT; i++) {
                 stars[i] = new Star(atlas2);
             }
-            mainShip = new MainShip(atlas, bulletPool);
+            mainShip = new MainShip(atlas, bulletPool,laserSound);
         } catch (GameException e) {
             e.printStackTrace();
         }
@@ -65,7 +72,9 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
       update(delta);
+      checkCollisions();
       freeAllDestroyed();
       draw();
     }
@@ -73,7 +82,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        this.worldBounds = worldBounds;
         background.resize(worldBounds);
         mainShip.resize(worldBounds);
         for (Star star : stars) {
@@ -88,7 +96,8 @@ public class GameScreen extends BaseScreen {
         atlas.dispose();
         bulletPool.dispose();
         music.dispose();
-        mainShip.dispose();
+        enemyPool.dispose();
+        laserSound.dispose();
         enemyPool.dispose();
         super.dispose();
 
@@ -122,21 +131,29 @@ public class GameScreen extends BaseScreen {
 
 
     private void update (float delta) {
-        animateTimer += delta;
         for (Star star : stars) {
             star.update(delta);
         }
         mainShip.update(delta);
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
-        if (animateTimer >= animateInterval) {
-            animateTimer = 0;
-            EnemyShip enemyShip = enemyPool.obtain();
-            enemyShip.setEnemyShipParameters(enemyShipRegion, worldBounds);
-        }
+        enemyEmitter.generate(delta);
         }
 
-    public void freeAllDestroyed() {
+        private void checkCollisions () {
+            List <EnemyShip> enemyList = enemyPool.getActiveObjects();
+            for (EnemyShip enemyShip : enemyList) {
+                if (enemyShip.isDestroyed()) {
+                    continue;
+                }
+                float minDist = enemyShip.getHalfWidth() + mainShip.getHalfWidth();
+                if (mainShip.pos.dst(enemyShip.pos) < minDist) {
+                    enemyShip.destroy();
+                }
+            }
+        }
+
+    private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveObjects();
         enemyPool.freeAllDestroyedActiveObjects();
 
