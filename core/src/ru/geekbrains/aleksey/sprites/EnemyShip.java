@@ -8,15 +8,16 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
-
+import ru.geekbrains.aleksey.pool.ExplosionPool;
 
 
 public class EnemyShip extends Ship {
     private final Vector2 enemyV = new Vector2(0, -0.5f);
 
 
-    public EnemyShip (BulletPool bulletPool, Rect worldBounds) {
+    public EnemyShip (BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         v = new Vector2();
         v0 = new Vector2();
@@ -38,6 +39,7 @@ public class EnemyShip extends Ship {
         this.shootSound = shootSound;
         this.hp = hp;
         this.v.set(v0);
+        bulletPos = new Vector2();
         setHeightProportion(height);
 
     }
@@ -54,9 +56,15 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        bulletPos.set(pos.x, pos.y - getHalfHeight());
         fightMode();
     if (getBottom() <= worldBounds.getBottom()){
         destroy();
         }
+    }
+
+    public boolean isBulletCollision (Rect bullet) {
+        return ! (bullet.getRight() < getLeft() || bullet.getLeft() > getRight() ||
+                bullet.getBottom() > getTop() || bullet.getTop() < pos.y);
     }
 }

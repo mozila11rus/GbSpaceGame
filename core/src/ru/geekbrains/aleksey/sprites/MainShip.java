@@ -9,12 +9,14 @@ import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
+import ru.geekbrains.aleksey.pool.ExplosionPool;
 
 
 public class MainShip extends Ship {
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.02f;
     private static final int INVALID_POINTER = -1;
+    private static final int HP = 10;
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -22,19 +24,21 @@ public class MainShip extends Ship {
     private int rightPointer = INVALID_POINTER;
 
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) throws GameException {
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) throws GameException {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.shootSound = shootSound;
         bulletRegion = atlas.findRegion("bulletMainShip");
         bulletV = new Vector2(0, 0.5f);
+        bulletPos = new Vector2();
         v0 = new Vector2(0.3f,0f);
         reloadInterval = 0.25f;
         reloadTimer = reloadInterval;
         v = new Vector2();
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 100;
+        hp = HP;
     }
 
     @Override
@@ -125,6 +129,7 @@ public class MainShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        bulletPos.set(pos.x, pos.y + getHalfHeight());
        if (getLeft() < worldBounds.getLeft()) {
            setLeft(worldBounds.getLeft());
            stop();
@@ -133,6 +138,11 @@ public class MainShip extends Ship {
            setRight(worldBounds.getRight());
            stop();
        }
+    }
+
+    public boolean isBulletCollision (Rect bullet) {
+        return !(bullet.getRight() < getLeft() || bullet.getLeft() > getRight() ||
+                 bullet.getBottom() > pos.y || bullet.getTop() < getBottom() );
     }
 
     private void moveRight() {
