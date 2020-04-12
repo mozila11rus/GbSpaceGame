@@ -79,7 +79,7 @@ public class GameScreen extends BaseScreen {
             }
             mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
             gameOver = new GameOver(atlas);
-            buttonNewGame = new ButtonNewGame(atlas);
+            buttonNewGame = new ButtonNewGame(atlas, this);
         } catch (GameException e) {
             e.printStackTrace();
         }
@@ -243,5 +243,7 @@ public class GameScreen extends BaseScreen {
     public void reset() {
         state = State.PLAYING;
         mainShip.resetShip();
+        enemyPool.getActiveObjects().clear();
+        bulletPool.getActiveObjects().clear();
     }
 }

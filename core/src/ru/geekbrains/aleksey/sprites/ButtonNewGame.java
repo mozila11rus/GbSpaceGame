@@ -9,10 +9,11 @@ import ru.geekbrains.aleksey.screen.GameScreen;
 
 public class ButtonNewGame extends ScaledButton {
 
-    private GameScreen gameScreen = new GameScreen();
+    private GameScreen gameScreen;
 
-    public ButtonNewGame(TextureAtlas atlas) throws GameException {
+    public ButtonNewGame(TextureAtlas atlas, GameScreen gameScreen) throws GameException {
         super(atlas.findRegion("button_new_game"));
+        this.gameScreen = gameScreen;
     }
 
 
