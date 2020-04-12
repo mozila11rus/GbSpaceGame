@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 
 import ru.geekbrains.aleksey.base.BaseScreen;
+import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
@@ -19,6 +20,8 @@ import ru.geekbrains.aleksey.pool.EnemyPool;
 import ru.geekbrains.aleksey.pool.ExplosionPool;
 import ru.geekbrains.aleksey.sprites.Background;
 import ru.geekbrains.aleksey.sprites.Bullet;
+import ru.geekbrains.aleksey.sprites.ButtonExit;
+import ru.geekbrains.aleksey.sprites.ButtonNewGame;
 import ru.geekbrains.aleksey.sprites.EnemyShip;
 import ru.geekbrains.aleksey.sprites.GameOver;
 import ru.geekbrains.aleksey.sprites.MainShip;
@@ -47,6 +50,7 @@ public class GameScreen extends BaseScreen {
     private Sound explosion;
     private State state;
     private GameOver gameOver;
+    private ButtonNewGame buttonNewGame;
 
     @Override
     public void show() {
@@ -75,6 +79,7 @@ public class GameScreen extends BaseScreen {
             }
             mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
             gameOver = new GameOver(atlas);
+            buttonNewGame = new ButtonNewGame(atlas);
         } catch (GameException e) {
             e.printStackTrace();
         }
@@ -95,6 +100,7 @@ public class GameScreen extends BaseScreen {
         background.resize(worldBounds);
         mainShip.resize(worldBounds);
         gameOver.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
         for (Star star : stars) {
             star.resize(worldBounds);
         }
@@ -135,6 +141,7 @@ public class GameScreen extends BaseScreen {
         if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
         }
+        buttonNewGame.touchDown(touch,pointer,button);
         return false;
 
     }
@@ -144,6 +151,7 @@ public class GameScreen extends BaseScreen {
         if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
         }
+        buttonNewGame.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -161,6 +169,7 @@ public class GameScreen extends BaseScreen {
         }
 
         private void checkCollisions () {
+
         if (state != State.PLAYING) {
             return;
         }
@@ -198,6 +207,7 @@ public class GameScreen extends BaseScreen {
             if (mainShip.isDestroyed()) {
                 state = State.GAME_OVER;
             }
+
         }
 
     private void freeAllDestroyed() {
@@ -223,9 +233,15 @@ public class GameScreen extends BaseScreen {
             break;
            case GAME_OVER:
                gameOver.draw(batch);
+               buttonNewGame.draw(batch);
                break;
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    public void reset() {
+        state = State.PLAYING;
+        mainShip.resetShip();
     }
 }

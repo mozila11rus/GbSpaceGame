@@ -5,11 +5,14 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import javax.swing.plaf.nimbus.State;
+
 import ru.geekbrains.aleksey.base.Ship;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.pool.BulletPool;
 import ru.geekbrains.aleksey.pool.ExplosionPool;
+import ru.geekbrains.aleksey.screen.GameScreen;
 
 
 public class MainShip extends Ship {
@@ -22,6 +25,8 @@ public class MainShip extends Ship {
     private boolean pressedRight;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
+    private GameScreen gameScreen = new GameScreen();
+    private State state;
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) throws GameException {
@@ -41,12 +46,18 @@ public class MainShip extends Ship {
         hp = HP;
     }
 
+    public void fullHP () {
+        hp = HP;
+    }
+
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(SHIP_HEIGHT);
         setBottom(worldBounds.getBottom() + BOTTOM_MARGIN);
     }
+
+
 
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -155,6 +166,11 @@ public class MainShip extends Ship {
 
     private void stop() {
         v.setZero();
+    }
+
+    public void resetShip () {
+        flushDestroy();
+        fullHP();
     }
 
 }
