@@ -41,12 +41,18 @@ public class MainShip extends Ship {
         hp = HP;
     }
 
+    public void fullHP () {
+        hp = HP;
+    }
+
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(SHIP_HEIGHT);
         setBottom(worldBounds.getBottom() + BOTTOM_MARGIN);
     }
+
+
 
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -155,6 +161,13 @@ public class MainShip extends Ship {
 
     private void stop() {
         v.setZero();
+    }
+
+    public void resetShip () {
+        flushDestroy();
+        fullHP();
+        stop();
+        pos.x = 0;
     }
 
 }

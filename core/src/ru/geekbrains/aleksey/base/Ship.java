@@ -59,9 +59,11 @@ public abstract class  Ship extends Sprite {
         hp -= damage;
         if (hp <= 0) {
             hp = 0;
+            damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
             destroy();
         }
     }
+
 
     @Override
     public void destroy() {
