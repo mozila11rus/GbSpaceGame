@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.base.BaseScreen;
+import ru.geekbrains.aleksey.base.Sprite;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.sprites.Background;
@@ -19,6 +20,7 @@ import ru.geekbrains.aleksey.sprites.Star;
 public class MenuScreen extends BaseScreen {
 
     private Texture bg;
+    private Sprite logo;
     private Background background;
     private TextureAtlas atlas;
     private static final int STAR_COUNT = 128;
@@ -40,6 +42,7 @@ public class MenuScreen extends BaseScreen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         music.setLooping(true);
         music.play();
+        logo.setBottom(worldBounds.getBottom() + 0.2f);
         try {
             background = new Background(bg);
             stars = new Star[STAR_COUNT];
@@ -48,6 +51,7 @@ public class MenuScreen extends BaseScreen {
             }
             buttonExit = new ButtonExit(atlas);
             buttonPlay = new ButtonPlay(atlas, game);
+            logo = new Sprite(atlas.findRegion("logo"));
         } catch (GameException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -77,6 +81,7 @@ public class MenuScreen extends BaseScreen {
         }
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
+        logo.resize(worldBounds);
     }
 
     @Override
@@ -111,6 +116,7 @@ public class MenuScreen extends BaseScreen {
         }
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
+        logo.draw(batch);
         batch.end();
     }
 }
