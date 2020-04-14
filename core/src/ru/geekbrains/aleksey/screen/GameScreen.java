@@ -38,6 +38,7 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private TextureAtlas atlas;
     private TextureAtlas atlas2;
+    private TextureAtlas atlas3;
     private MainShip mainShip;
     private BulletPool bulletPool;
     private Music music;
@@ -58,6 +59,7 @@ public class GameScreen extends BaseScreen {
         bg = new Texture("spaceBG.jpg");
         atlas = new TextureAtlas(Gdx.files.internal("textures/mainAtlas.tpack"));
         atlas2 = new TextureAtlas(Gdx.files.internal("textures/gameAtlas.pack"));
+        atlas3 = new TextureAtlas(Gdx.files.internal("textures/goAtlas.pack"));
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/mainScreenMusic.mp3"));
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
@@ -78,8 +80,8 @@ public class GameScreen extends BaseScreen {
                 stars[i] = new Star(atlas2);
             }
             mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
-            gameOver = new GameOver(atlas);
-            buttonNewGame = new ButtonNewGame(atlas, this);
+            gameOver = new GameOver(atlas3);
+            buttonNewGame = new ButtonNewGame(atlas3, this);
         } catch (GameException e) {
             e.printStackTrace();
         }
@@ -110,6 +112,7 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        atlas3.dispose();
         bulletPool.dispose();
         music.dispose();
         enemyPool.dispose();
