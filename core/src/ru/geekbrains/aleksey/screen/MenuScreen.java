@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.aleksey.base.BaseScreen;
-import ru.geekbrains.aleksey.base.Sprite;
 import ru.geekbrains.aleksey.exception.GameException;
 import ru.geekbrains.aleksey.math.Rect;
 import ru.geekbrains.aleksey.sprites.Background;
@@ -19,16 +18,17 @@ import ru.geekbrains.aleksey.sprites.Logo;
 import ru.geekbrains.aleksey.sprites.Star;
 
 public class MenuScreen extends BaseScreen {
+    private static final int STAR_COUNT = 128;
+
+    private final Game game;
 
     private Texture bg;
     private Logo logo;
     private Background background;
     private TextureAtlas atlas;
-    private static final int STAR_COUNT = 128;
     private Star [] stars;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
-    private final Game game;
     private Music music;
 
     public MenuScreen(Game game) {
@@ -103,8 +103,6 @@ public class MenuScreen extends BaseScreen {
             star.update(delta);
         }
     }
-
-
 
     private void draw () {
         Gdx.gl.glClearColor(1, 0, 0, 1);

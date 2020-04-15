@@ -143,8 +143,9 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            buttonNewGame.touchDown(touch,pointer,button);
         }
-        buttonNewGame.touchDown(touch,pointer,button);
         return false;
 
     }
@@ -153,8 +154,9 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer, button);
+        } else if (state == State.GAME_OVER) {
+            buttonNewGame.touchUp(touch, pointer, button);
         }
-        buttonNewGame.touchUp(touch, pointer, button);
         return false;
     }
 
@@ -168,6 +170,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyEmitter.generate(delta);
+            } else if (state == State.GAME_OVER) {
+            buttonNewGame.update(delta);
             }
         }
 
@@ -246,7 +250,8 @@ public class GameScreen extends BaseScreen {
     public void reset() {
         state = State.PLAYING;
         mainShip.resetShip();
-        enemyPool.getActiveObjects().clear();
-        bulletPool.getActiveObjects().clear();
+        enemyPool.freeAllActiveObjects();
+        bulletPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
     }
 }

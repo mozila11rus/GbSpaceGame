@@ -18,7 +18,7 @@ public class ButtonExit extends ScaledButton {
         setHeightProportion(0.17f);
         pos.x = 0;
 //        setRight(worldBounds.getRight() - 0.05f);
-        setBottom(worldBounds.getBottom() + 0.1f);
+        setBottom(worldBounds.getBottom() + 0.05f);
     }
 
     @Override
