@@ -14,6 +14,9 @@ import ru.geekbrains.aleksey.sprites.Explosion;
 public abstract class  Ship extends Sprite {
 
     private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+    private static final float DELTA_COEFF = 1.2f;
+    private float saveDelta = 0f;
+
 
     protected Rect worldBounds;
     protected BulletPool bulletPool;
@@ -39,8 +42,18 @@ public abstract class  Ship extends Sprite {
         super(region, rows, cols, frames);
     }
 
+    public int getHp() {
+        return hp;
+    }
+
     @Override
     public void update(float delta) {
+        if (saveDelta == 0f) {
+            saveDelta = delta;
+        }
+        if (delta > saveDelta * DELTA_COEFF) {
+            delta = saveDelta;
+        }
         pos.mulAdd(v,delta);
         damageAnimateTimer += delta;
         if(damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {

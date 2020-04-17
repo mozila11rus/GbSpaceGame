@@ -12,8 +12,8 @@ import ru.geekbrains.aleksey.pool.ExplosionPool;
 
 
 public class EnemyShip extends Ship {
-    private final Vector2 enemyV = new Vector2(0, -0.5f);
 
+    private final Vector2 enemyV = new Vector2(0, -0.5f);
 
     public EnemyShip (BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds) {
         this.bulletPool = bulletPool;

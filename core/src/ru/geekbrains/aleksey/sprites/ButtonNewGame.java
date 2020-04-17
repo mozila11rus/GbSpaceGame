@@ -32,9 +32,10 @@ public class ButtonNewGame extends ScaledButton {
         animateTimer = 0f;
         if (isGrow) {
             scale += delta;
-        } if (scale >= MAX_SCALE) {
-            scale = MAX_SCALE;
-            isGrow = false;
+            if (scale >= MAX_SCALE) {
+                scale = MAX_SCALE;
+                isGrow = false;
+            }
         } else {
             scale -= delta;
             if (scale <= MIN_SCALE) {
