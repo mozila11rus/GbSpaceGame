@@ -13,7 +13,7 @@ import ru.geekbrains.aleksey.pool.ExplosionPool;
 
 
 public class MainShip extends Ship {
-    private static final float SHIP_HEIGHT = 0.15f;
+    private static final float SHIP_HEIGHT = 0.12f;
     private static final float BOTTOM_MARGIN = 0.02f;
     private static final int INVALID_POINTER = -1;
     private static final int HP = 100;
@@ -36,7 +36,7 @@ public class MainShip extends Ship {
         reloadInterval = 0.25f;
         reloadTimer = reloadInterval;
         v = new Vector2();
-        bulletHeight = 0.01f;
+        bulletHeight = 0.02f;
         damage = 1;
         hp = HP;
     }
@@ -77,6 +77,7 @@ public class MainShip extends Ship {
                 pressedLeft = false;
                 if (pressedRight) {
                     moveRight();
+
                 } else {
                     stop();
                 }

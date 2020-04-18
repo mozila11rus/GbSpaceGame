@@ -41,8 +41,9 @@ public class EnemyShip extends Ship {
         this.v.set(v0);
         bulletPos = new Vector2();
         setHeightProportion(height);
-
     }
+
+
     private void fightMode () {
             if (getTop() > worldBounds.getTop()) {
                 v.set(enemyV);
