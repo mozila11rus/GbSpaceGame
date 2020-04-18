@@ -13,7 +13,7 @@ public class Star extends Sprite {
 
     private static final float HEIGHT = 0.015f;
 
-    private Vector2 v;
+    protected final Vector2 v;
     private Rect worldBounds;
 
     private float animateInterval = 0.5f;
@@ -45,6 +45,9 @@ public class Star extends Sprite {
             animateTimer = 0;
             scale = 1;
         }
+        checkBounds();
+    }
+    public void checkBounds () {
         if (getTop() < worldBounds.getBottom()) {
             setBottom(worldBounds.getTop());
         }

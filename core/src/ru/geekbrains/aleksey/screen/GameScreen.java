@@ -28,6 +28,7 @@ import ru.geekbrains.aleksey.sprites.EnemyShip;
 import ru.geekbrains.aleksey.sprites.GameOver;
 import ru.geekbrains.aleksey.sprites.MainShip;
 import ru.geekbrains.aleksey.sprites.Star;
+import ru.geekbrains.aleksey.sprites.TrackStar;
 import ru.geekbrains.aleksey.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
@@ -43,7 +44,7 @@ public class GameScreen extends BaseScreen {
 
     private Texture bg;
     private Background background;
-    private Star[] stars;
+    private TrackStar[] stars;
     private TextureAtlas atlas;
     private TextureAtlas atlas2;
     private TextureAtlas atlas3;
@@ -83,7 +84,7 @@ public class GameScreen extends BaseScreen {
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas, explosion);
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds);
-        enemyEmitter = new EnemyEmitter(atlas, enemyPool, worldBounds, bulletSound);
+        enemyEmitter = new EnemyEmitter(atlas2, enemyPool, worldBounds, bulletSound);
         font = new Font("font/font.fnt", "font/font.png");
         font.setSize(FONT_SIZE);
         sbFrags = new StringBuilder();
@@ -93,11 +94,11 @@ public class GameScreen extends BaseScreen {
         frags = 0;
         try {
             background = new Background(bg);
-            stars = new Star[STAR_COUNT];
+            stars = new TrackStar[STAR_COUNT];
+            mainShip = new MainShip(atlas2, bulletPool, explosionPool, laserSound);
             for(int i = 0; i < STAR_COUNT; i++) {
-                stars[i] = new Star(atlas2);
+                stars[i] = new TrackStar (atlas2, mainShip.getV());
             }
-            mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
             gameOver = new GameOver(atlas3);
             buttonNewGame = new ButtonNewGame(atlas3, this);
         } catch (GameException e) {

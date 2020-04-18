@@ -3,17 +3,59 @@ gameAtlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-star
+big
   rotate: false
-  xy: 1, 350
-  size: 650, 642
-  orig: 650, 642
+  xy: 1, 559
+  size: 464, 340
+  orig: 464, 340
   offset: 0, 0
   index: -1
-ship
+small
+  rotate: false
+  xy: 1, 321
+  size: 370, 236
+  orig: 370, 236
+  offset: 0, 0
+  index: -1
+main
+  rotate: false
+  xy: 467, 695
+  size: 398, 204
+  orig: 398, 204
+  offset: 0, 0
+  index: -1
+middle
+  rotate: false
+  xy: 1, 23
+  size: 256, 296
+  orig: 256, 296
+  offset: 0, 0
+  index: -1
+meteor
+  rotate: false
+  xy: 467, 543
+  size: 282, 150
+  orig: 282, 150
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 259, 167
+  size: 172, 152
+  orig: 172, 152
+  offset: 0, 0
+  index: -1
+bulletMainShip
+  rotate: false
+  xy: 867, 879
+  size: 16, 20
+  orig: 16, 20
+  offset: 0, 0
+  index: -1
+enemylaser
   rotate: false
   xy: 1, 1
-  size: 394, 347
-  orig: 394, 347
+  size: 14, 20
+  orig: 14, 20
   offset: 0, 0
   index: -1
