@@ -97,7 +97,7 @@ public class GameScreen extends BaseScreen {
             for(int i = 0; i < STAR_COUNT; i++) {
                 stars[i] = new Star(atlas2);
             }
-            mainShip = new MainShip(atlas, bulletPool, explosionPool, laserSound);
+            mainShip = new MainShip(atlas2, bulletPool, explosionPool, laserSound);
             gameOver = new GameOver(atlas3);
             buttonNewGame = new ButtonNewGame(atlas3, this);
         } catch (GameException e) {

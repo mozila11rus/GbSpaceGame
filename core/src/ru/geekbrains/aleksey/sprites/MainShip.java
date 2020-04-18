@@ -25,7 +25,7 @@ public class MainShip extends Ship {
 
 
     public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) throws GameException {
-        super(atlas.findRegion("main_ship"), 1, 2, 2);
+        super(atlas.findRegion("main"), 1, 2, 2);
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
         this.shootSound = shootSound;
