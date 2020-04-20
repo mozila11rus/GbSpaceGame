@@ -32,6 +32,7 @@ public abstract class  Ship extends Sprite {
     protected  float reloadTimer ;
     protected float reloadInterval;
     protected float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+
     protected ExplosionPool explosionPool;
 
     public Ship (){
